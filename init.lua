@@ -735,17 +735,13 @@ do
   local servers = {
     -- clangd = {},
     -- gopls = {},
-    -- pyright = {},
-    -- tsc = {},
-    --
-    -- Some languages (like rust) have entire language plugins that can be useful:
-    --    https://github.com/mrcjkb/rustaceanvim
-    --
-    -- But for many setups, the LSP (`rust_analyzer`) will work just fine
-    rust_analyzer = {},
+    pyright = {},
+    tsc = {},
     taplo = {},
-
-    stylua = {}, -- Used to format Lua code
+    stylua = {},
+    ts_ls = {}, -- JavaScript, TypeScript, JSX/TSX (React)
+    cssls = {}, -- CSS, SCSS, Less
+    eslint = {}, -- lint diagnostics, if your projects use ESLint
 
     -- Special Lua Config, as recommended by neovim help docs
     lua_ls = {
@@ -780,7 +776,8 @@ do
     },
   }
 
-  vim.pack.add { gh 'neovim/nvim-lspconfig' }
+  vim.pack.add { gh 'neovim/nvim-lspconfig', gh 'mason-org/mason.nvim', gh 'mrcjkb/rustaceanvim' }
+  require('mason').setup {}
 
   for name, server in pairs(servers) do
     vim.lsp.config(name, server)
@@ -818,6 +815,13 @@ do
       lua = { 'stylua' },
       rust = { 'rustfmt' },
       toml = { 'taplo' },
+      python = { 'ruff_format' },
+      javascript = { 'prettierd', 'prettier', stop_after_first = true },
+      javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+      typescript = { 'prettierd', 'prettier', stop_after_first = true },
+      typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+      css = { 'prettierd', 'prettier', stop_after_first = true },
+
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
       --
